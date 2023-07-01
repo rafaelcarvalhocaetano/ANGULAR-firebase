@@ -11,14 +11,52 @@ import (
 	"github.com/rafaelcarvalhocaetano/gqlgen/graph/model"
 )
 
-// CreateTodo is the resolver for the createTodo field.
-func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
-	panic(fmt.Errorf("not implemented: CreateTodo - createTodo"))
+// CreateCategory is the resolver for the createCategory field.
+func (r *mutationResolver) CreateCategory(ctx context.Context, input model.NewCategory) (*model.Category, error) {
+	// panic(fmt.Errorf("not implemented: CreateCategory - createCategory"))
+
+	category, err := r.CategoryDb.Create(input.Name, *input.Description)
+	if err != nil {
+		return nil, err
+	}
+
+	return &model.Category{
+		ID:          category.ID,
+		Name:        category.Name,
+		Description: &category.Description,
+	}, nil
+
 }
 
-// Todos is the resolver for the todos field.
-func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
-	panic(fmt.Errorf("not implemented: Todos - todos"))
+// CreateCourse is the resolver for the createCourse field.
+func (r *mutationResolver) CreateCourse(ctx context.Context, input model.NewCourse) (*model.Course, error) {
+	panic(fmt.Errorf("not implemented: CreateCourse - createCourse"))
+}
+
+// Categories is the resolver for the categories field.
+func (r *queryResolver) Categories(ctx context.Context) ([]*model.Category, error) {
+	// panic(fmt.Errorf("not implemented: Categories - categories"))
+	categories := []*model.Category{}
+	data, err := r.CategoryDb.FindAll()
+	if err != nil {
+		return nil, err
+	}
+
+	for _, category := range data {
+		categories = append(categories, &model.Category{
+			ID:          category.ID,
+			Name:        category.Name,
+			Description: &category.Description,
+		})
+	}
+
+	return categories, nil
+
+}
+
+// Courses is the resolver for the courses field.
+func (r *queryResolver) Courses(ctx context.Context) ([]*model.Course, error) {
+	panic(fmt.Errorf("not implemented: Courses - courses"))
 }
 
 // Mutation returns MutationResolver implementation.
@@ -29,3 +67,17 @@ func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
+
+// TODO: OldCode generated with example
+// // !!! WARNING !!!
+// // The code below was going to be deleted when updating resolvers. It has been copied here so you have
+// // one last chance to move it out of harms way if you want. There are two reasons this happens:
+// //  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
+// //    it when you're done.
+// //  - You have helper methods in this file. Move them out to keep these resolver files clean.
+// func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
+// 	panic(fmt.Errorf("not implemented: CreateTodo - createTodo"))
+// }
+// func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
+// 	panic(fmt.Errorf("not implemented: Todos - todos"))
+// }
