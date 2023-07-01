@@ -2,6 +2,7 @@ package database
 
 import (
 	"database/sql"
+	"fmt"
 
 	"github.com/google/uuid"
 )
@@ -52,4 +53,16 @@ func (c *Category) FindAll() ([]Category, error) {
 
 	return categories, nil
 
+}
+
+func (c *Category) FindByCourseId(courseID string) (Category, error) {
+	var id, name, description string
+	err := c.db.QueryRow("SELECT c.id, c.name, c.description FROM categories c INNER JOIN courses co ON c.id = co.category_id", courseID).
+		Scan(&id, &name, &description)
+
+	fmt.Println(err)
+	if err != nil {
+		return Category{}, err
+	}
+	return Category{ID: id, Name: name, Description: description}, nil
 }

@@ -6,16 +6,49 @@ package graph
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/rafaelcarvalhocaetano/gqlgen/graph/model"
 )
 
+// Courses is the resolver for the courses field.
+func (r *categoryResolver) Courses(ctx context.Context, obj *model.Category) ([]*model.Course, error) {
+	data, err := r.CourseDB.FindByCategoryID(obj.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	var courses []*model.Course
+
+	for _, course := range data {
+		courses = append(courses, &model.Course{
+			ID:          course.ID,
+			Name:        course.Name,
+			Description: &course.Description,
+		})
+	}
+
+	return courses, nil
+}
+
+// Category is the resolver for the category field.
+func (r *courseResolver) Category(ctx context.Context, obj *model.Course) (*model.Category, error) {
+	// panic(fmt.Errorf("not implemented: Category - category"))
+
+	category, err := r.CategoryDB.FindByCourseId(obj.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	return &model.Category{
+		ID:          category.ID,
+		Name:        category.Name,
+		Description: &category.Name,
+	}, nil
+}
+
 // CreateCategory is the resolver for the createCategory field.
 func (r *mutationResolver) CreateCategory(ctx context.Context, input model.NewCategory) (*model.Category, error) {
-	// panic(fmt.Errorf("not implemented: CreateCategory - createCategory"))
-
-	category, err := r.CategoryDb.Create(input.Name, *input.Description)
+	category, err := r.CategoryDB.Create(input.Name, *input.Description)
 	if err != nil {
 		return nil, err
 	}
@@ -25,19 +58,26 @@ func (r *mutationResolver) CreateCategory(ctx context.Context, input model.NewCa
 		Name:        category.Name,
 		Description: &category.Description,
 	}, nil
-
 }
 
 // CreateCourse is the resolver for the createCourse field.
 func (r *mutationResolver) CreateCourse(ctx context.Context, input model.NewCourse) (*model.Course, error) {
-	panic(fmt.Errorf("not implemented: CreateCourse - createCourse"))
+	course, err := r.CourseDB.Create(input.Name, *input.Description, input.CategoryID)
+	if err != nil {
+		return nil, err
+	}
+	return &model.Course{
+		ID:          course.ID,
+		Name:        course.Name,
+		Description: &course.Description,
+	}, nil
 }
 
 // Categories is the resolver for the categories field.
 func (r *queryResolver) Categories(ctx context.Context) ([]*model.Category, error) {
 	// panic(fmt.Errorf("not implemented: Categories - categories"))
 	categories := []*model.Category{}
-	data, err := r.CategoryDb.FindAll()
+	data, err := r.CategoryDB.FindAll()
 	if err != nil {
 		return nil, err
 	}
@@ -51,13 +91,32 @@ func (r *queryResolver) Categories(ctx context.Context) ([]*model.Category, erro
 	}
 
 	return categories, nil
-
 }
 
 // Courses is the resolver for the courses field.
 func (r *queryResolver) Courses(ctx context.Context) ([]*model.Course, error) {
-	panic(fmt.Errorf("not implemented: Courses - courses"))
+	courses := []*model.Course{}
+	data, err := r.CategoryDB.FindAll()
+	if err != nil {
+		return nil, err
+	}
+
+	for _, course := range data {
+		courses = append(courses, &model.Course{
+			ID:          course.ID,
+			Name:        course.Name,
+			Description: &course.Description,
+		})
+	}
+
+	return courses, nil
 }
+
+// Category returns CategoryResolver implementation.
+func (r *Resolver) Category() CategoryResolver { return &categoryResolver{r} }
+
+// Course returns CourseResolver implementation.
+func (r *Resolver) Course() CourseResolver { return &courseResolver{r} }
 
 // Mutation returns MutationResolver implementation.
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
@@ -65,19 +124,7 @@ func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
 // Query returns QueryResolver implementation.
 func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
+type categoryResolver struct{ *Resolver }
+type courseResolver struct{ *Resolver }
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
-
-// TODO: OldCode generated with example
-// // !!! WARNING !!!
-// // The code below was going to be deleted when updating resolvers. It has been copied here so you have
-// // one last chance to move it out of harms way if you want. There are two reasons this happens:
-// //  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
-// //    it when you're done.
-// //  - You have helper methods in this file. Move them out to keep these resolver files clean.
-// func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
-// 	panic(fmt.Errorf("not implemented: CreateTodo - createTodo"))
-// }
-// func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
-// 	panic(fmt.Errorf("not implemented: Todos - todos"))
-// }

@@ -7,5 +7,6 @@ import "github.com/rafaelcarvalhocaetano/gqlgen/internal/database"
 // It serves as dependency injection for your app, add any dependencies you require here.
 
 type Resolver struct {
-	CategoryDb *database.Category
+	CategoryDB *database.Category
+	CourseDB   *database.Course
 }

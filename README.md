@@ -57,9 +57,9 @@
 
   Agora, com nossa category.go injetada em schema.resolvers podemos acessar o CreateCategory que está dentro de internal/database/category dentro do schema.resolvers.go
 
-  image.png
-
 ```
+
+![plot](./fluxo.png)
 
 ## Persistindo categoria pelo playground GraphQL
 
@@ -92,6 +92,38 @@
       id
     }
   }
+
+```
+
+## Alterando o model do GraphQL
+
+```view
+
+  Existe a possibilidade de alterar o arquivo default do graph/model/models_gen.go.
+
+  Para realizar essa alteração será necessário entrar dentro do gqlgen.yml ir até o final do arquivo na parte de `models:` e Criar um novo apontamento para a nova struct que foi criada.
+
+
+  Ex gqlgen.ymnl:
+
+    models:
+      Category:
+        model:
+        - github.com/rafaelcarvalhocaetano/gqlgen/graph/model.Category
+      Course:
+        model:
+        - github.com/rafaelcarvalhocaetano/gqlgen/graph/model.Course
+      ID:
+        model:
+          - github.com/99designs/gqlgen/graphql.ID
+          - github.com/99designs/gqlgen/graphql.Int
+          - github.com/99designs/gqlgen/graphql.Int64
+          - github.com/99designs/gqlgen/graphql.Int32
+      Int:
+        model:
+          - github.com/99designs/gqlgen/graphql.Int
+          - github.com/99designs/gqlgen/graphql.Int64
+          - github.com/99designs/gqlgen/graphql.Int32
 
 
 ```
