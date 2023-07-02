@@ -95,12 +95,10 @@
 
 ## Alterando o model do GraphQL
 
+ Existe a possibilidade de alterar o arquivo default do graph/model/models_gen.go.
+ Para realizar essa alteração será necessário entrar dentro do gqlgen.yml ir até o final do arquivo na parte de `models:` e Criar um novo apontamento para a nova struct que foi criada.
+
 ```view
-
-  Existe a possibilidade de alterar o arquivo default do graph/model/models_gen.go.
-
-  Para realizar essa alteração será necessário entrar dentro do gqlgen.yml ir até o final do arquivo na parte de `models:` e Criar um novo apontamento para a nova struct que foi criada.
-
 
   Ex gqlgen.ymnl:
 
