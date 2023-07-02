@@ -6,15 +6,12 @@
 
 ## Gerando novos modelos
 
+ -  Para gerar um novo modelo com base em um novo schema ou um schema atualizado
+
 ```view
-
-  Para gerar um novo modelo com base em um novo schema ou um schema atualizado
-
   - go run github.com/99designs/gqlgen generate
-
-  Dentro do schema.resolvers.go existem codigos que foram alterados ou que não existem mais dentro do shcema graphql
-
 ```
+ - Dentro do schema.resolvers.go existem codigos que foram alterados ou que não existem mais dentro do shcema graphql
 
 ## Como fazer chamadas GraphQL através do Front ou Platground
 
