@@ -15,10 +15,9 @@
 
 ## Como fazer chamadas GraphQL através do Front ou Platground
 
+- Input de busca:
+  
 ```bash
-
-  Input de busca:
-
   query queryCategories {
     categories {
       id
@@ -26,8 +25,10 @@
       description
     }
   }
+```
+ -   Output dos erros:
+```bash
 
-  Output dos erros:
   {
   "errors": [
     {
