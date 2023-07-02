@@ -16,7 +16,7 @@
 
 ```
 
-## Como fazer chamadas para um GraphQL através do Front ou Platground
+## Como fazer chamadas GraphQL através do Front ou Platground
 
 ```bash
 
